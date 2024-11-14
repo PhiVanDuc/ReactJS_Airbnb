@@ -84,7 +84,7 @@ export default function HomePageNavbar({ pathname }) {
                             </div>
                         </div>
 
-                        { pathname === "/" && <CategoriesNavbar /> }
+                        { (pathname === "/" || pathname.startsWith("/search")) && <CategoriesNavbar /> }
                     </div>
                 ) : <PropertyNavbar />
             }

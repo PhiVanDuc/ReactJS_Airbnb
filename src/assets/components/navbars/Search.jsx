@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { DateRangePicker } from "react-date-range";
 
 import { Button } from "@/components/ui/button";
@@ -15,10 +16,12 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 
-import 'react-date-range/dist/styles.css'; // Style cho component
-import 'react-date-range/dist/theme/default.css'; // Chủ đề mặc định
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import { formatTimeToDate } from "@/utils/formatTime";
 
 export default function Search({ showSearch, setShowSearch }) {
+    const navigate = useNavigate();
     const [option, setOption] = useState("calendar");
     const [selectionRange, setSelectionRange] = useState({
         startDate: new Date(),
@@ -75,16 +78,26 @@ export default function Search({ showSearch, setShowSearch }) {
     }
 
     const handleSelect = (ranges) => {
-        setSelectionRange(ranges.selection);
+        setSelectionRange(ranges.selection);        
     };
 
     const onSubmit = (values) => {
-        console.log(values);
+        const formatValues = {
+            ...values,
+            selectionRange: {
+                startDate: formatTimeToDate(values.selectionRange.startDate),
+                endDate: formatTimeToDate(values.selectionRange.endDate)
+            }
+        };
+        const { country, selectionRange: { startDate, endDate }, guests, bedrooms, beds, bathrooms, properties } = formatValues;
+        setShowSearch(false)
+
+        navigate(`/search?country=${country}&startDate=${startDate}&endDate=${endDate}&guests=${guests}&bedrooms=${bedrooms}&beds=${beds}&bathrooms=${bathrooms}&properties=${properties}`);
     }
 
     return (
         <div className={cn(
-            "fixed inset-0 transition duration-500 invisible",
+            "fixed inset-0 transition duration-500 invisible z-20",
             showSearch ? "visible" : ""
         )}>
             <div className={cn(

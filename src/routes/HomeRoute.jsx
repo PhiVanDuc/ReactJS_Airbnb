@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import UserLayout from "../assets/layouts/UserLayout";
 import HomePage from "../assets/pages/home/HomePage";
 
+const SearchList = lazy(() => import("../assets/pages/home/SearchList"))
 const DetailProperty = lazy(() => import("../assets/pages/property/DetailProperty"));
 const PropertyBook = lazy(() => import("../assets/pages/property/book/PropertyBook"));
 const Images = lazy(() => import("../assets/pages/property/images/Images"));
@@ -17,6 +18,7 @@ export default function HomeRoute() {
         <Routes>
             <Route path="/" element={<UserLayout />}>
                 <Route index element={<HomePage />} />
+                <Route path="/search" element={<SearchList />} />
                 <Route path="property/:propertyId" element={<DetailProperty />} />
                 <Route path="property/:propertyId/book" element={<PropertyBook />} />
                 <Route path="property/:propertyId/images" element={<Images />} />
