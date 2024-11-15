@@ -7,10 +7,12 @@ import SuspenseLoading from "./assets/components/loadings/SuspenseLoading";
 import HomeRoute from "./routes/homeRoute";
 import HostingRoute from "./routes/HostingRoute";
 import PropertyCreateRoute from "./routes/PropertyCreateRoute";
-import { Toaster } from "sonner";
+import AdminRoute from "./routes/AdminRoute";
 
 const SuccessPayment = lazy(() => import("./assets/pages/success_payment/SuccessPayment"));
 const PublishCelebration = lazy(() => import("./assets/pages/become-a-host/publish-celebration/PublishCelebration"));
+
+import { Toaster } from "sonner";
 
 export default function App() {
     return (
@@ -42,6 +44,10 @@ export default function App() {
                     </Suspense>
                 } />
             </Routes>
+            
+            {/* Admin Route */}
+            <AdminRoute />
+            {/* End */}
         </div>
     )
 }
