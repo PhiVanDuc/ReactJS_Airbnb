@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 
 import AdminSidebar from "../components/sidebar/AdminSidebar";
@@ -14,23 +14,31 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
+import { lowerCase, upperCase } from "@/utils/formatFirstLetter";
+
 export default function AdminLayout() {
     const location = useLocation();
+    const params = useParams();
+
     const [arrPathname, setArrPathname] = useState(() => {
         return location.pathname
           .split("/")
           .filter((segment) => segment)
-          .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1));
+          .map((segment) => upperCase(segment));
     });
 
     useEffect(() => {
         setArrPathname(() => {
-            return location.pathname
+            const pathSegments = location.pathname
               .split("/")
               .filter((segment) => segment)
-              .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1));
+              .map((segment) => upperCase(segment));
+
+            return pathSegments.filter((segment) => {
+                return !Object.values(params).includes(segment.toLowerCase());
+            });
         });
-    }, [location])
+    }, [location, params]);
 
     return (
         <SidebarProvider>
@@ -59,7 +67,7 @@ export default function AdminLayout() {
                                         return (
                                             <Fragment key={path}>
                                                 <BreadcrumbItem>
-                                                    <BreadcrumbLink href={`/${path.charAt(0).toLocaleLowerCase() + path.slice(1)}`}>
+                                                    <BreadcrumbLink href={index === 0 ? "/admin" : `/admin/${lowerCase(path)}`}>
                                                         {path}
                                                     </BreadcrumbLink>
                                                 </BreadcrumbItem>

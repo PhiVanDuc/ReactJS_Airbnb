@@ -80,14 +80,14 @@ export default function AdminSidebarFooter() {
 
                         <DropdownMenuGroup>
                             <DropdownMenuItem
-                                className="gap-x-[10px] text-neutral-600 cursor-pointer"
+                                className="gap-x-[10px] text-neutral-500 cursor-pointer"
                                 onClick={() => { navigate("/") }}
                             >
                                 <PanelsTopLeft size={20} />
                                 User page
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem className="gap-x-[10px] text-neutral-600 cursor-pointer">
+                            <DropdownMenuItem className="gap-x-[10px] text-neutral-500 cursor-pointer">
                                 <UserPen size={20} />
                                 Profile
                             </DropdownMenuItem>
@@ -95,7 +95,7 @@ export default function AdminSidebarFooter() {
 
                         <DropdownMenuSeparator />
 
-                        <DropdownMenuItem className="gap-x-[10px] text-neutral-600 cursor-pointer">
+                        <DropdownMenuItem className="gap-x-[10px] text-neutral-500 cursor-pointer">
                             <LogOut size={20} />
                             Sign out
                         </DropdownMenuItem>
