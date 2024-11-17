@@ -35,7 +35,7 @@ export default function DataTable ({ columns, data, loading }) {
             <div className="flex items-center gap-x-[10px] w-full">
                 <Button>Search</Button>
                 <Input
-                    placeholder="Filter email..."
+                    placeholder="Filter name category..."
                     className="w-full"
                 />
             </div>

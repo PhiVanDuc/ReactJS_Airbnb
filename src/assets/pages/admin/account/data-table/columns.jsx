@@ -59,7 +59,11 @@ const columns = [
         },
         cell: info => {
             return (
-                <Switch />
+                <Switch
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                />
             )
         }
     },
@@ -76,7 +80,7 @@ const columns = [
             return (
                 <p
                     className={cn(
-                        "text-[14px] lg:text-[16px] font-semibold",
+                        "text-[14px] lg:text-[15px] font-semibold",
                         !row.blocked ? "text-green-500" : "text-root"
                     )}
                 >

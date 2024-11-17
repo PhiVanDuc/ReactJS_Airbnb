@@ -27,11 +27,12 @@ const CheckInInstruction = lazy(() => import("../assets/pages/hosting/listing/ed
 const HouseRule = lazy(() => import("../assets/pages/hosting/listing/editor/arrival/HouseRule"));
 const CheckoutInstruction = lazy(() => import("../assets/pages/hosting/listing/editor/arrival/CheckoutInstruction"));
 
+const NotFound = lazy(() => import("@/assets/components/NotFound"));
+
 export default function HostingRoute() {
     return (
         <Routes>
             <Route
-                path="/hosting"
                 element={
                     <Suspense fallback={<SuspenseLoading />}>
                         <HostingLayout />
@@ -61,6 +62,8 @@ export default function HostingRoute() {
                     <Route path="house-rules" element={<HouseRule />} />
                     <Route path="checkout-instructions" element={<CheckoutInstruction />} />
                 </Route>
+
+                <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
     )

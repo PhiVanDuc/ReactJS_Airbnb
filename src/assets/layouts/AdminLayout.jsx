@@ -17,28 +17,28 @@ import {
 import { lowerCase, upperCase } from "@/utils/formatFirstLetter";
 
 export default function AdminLayout() {
-    const location = useLocation();
-    const params = useParams();
+    // const location = useLocation();
+    // const params = useParams();
 
-    const [arrPathname, setArrPathname] = useState(() => {
-        return location.pathname
-          .split("/")
-          .filter((segment) => segment)
-          .map((segment) => upperCase(segment));
-    });
+    // const [arrPathname, setArrPathname] = useState(() => {
+    //     return location.pathname
+    //       .split("/")
+    //       .filter((segment) => segment)
+    //       .map((segment) => upperCase(segment));
+    // });
 
-    useEffect(() => {
-        setArrPathname(() => {
-            const pathSegments = location.pathname
-              .split("/")
-              .filter((segment) => segment)
-              .map((segment) => upperCase(segment));
+    // useEffect(() => {
+    //     setArrPathname(() => {
+    //         const pathSegments = location.pathname
+    //           .split("/")
+    //           .filter((segment) => segment)
+    //           .map((segment) => upperCase(segment));
 
-            return pathSegments.filter((segment) => {
-                return !Object.values(params).includes(segment.toLowerCase());
-            });
-        });
-    }, [location, params]);
+    //         return pathSegments.filter((segment) => {
+    //             return !Object.values(params).includes(segment.toLowerCase());
+    //         });
+    //     });
+    // }, [location, params]);
 
     return (
         <SidebarProvider>
@@ -48,7 +48,7 @@ export default function AdminLayout() {
                 <header className="flex items-center px-[20px] py-[15px] border-b border-neutral-200 w-full bg-sidebar">
                     <SidebarTrigger />
                     <Separator orientation="vertical" className="mx-2 mr-4 h-4 bg-slate-300" />
-
+{/* 
                     <Breadcrumb>
                         <BreadcrumbList>
                             {
@@ -67,7 +67,7 @@ export default function AdminLayout() {
                                         return (
                                             <Fragment key={path}>
                                                 <BreadcrumbItem>
-                                                    <BreadcrumbLink href={index === 0 ? "/admin" : `/admin/${lowerCase(path)}`}>
+                                                    <BreadcrumbLink href={lowerCase(path)}>
                                                         {path}
                                                     </BreadcrumbLink>
                                                 </BreadcrumbItem>
@@ -79,7 +79,7 @@ export default function AdminLayout() {
                                 })
                             }
                         </BreadcrumbList>
-                    </Breadcrumb>
+                    </Breadcrumb> */}
                 </header>
 
                 <div className="p-[20px]">

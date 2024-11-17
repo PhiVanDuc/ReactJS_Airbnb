@@ -17,11 +17,12 @@ const Price = lazy(() => import("../assets/pages/become-a-host/price/Price"));
 const Discount = lazy(() => import("../assets/pages/become-a-host/discount/Discount"));
 const Receipt = lazy(() => import("../assets/pages/become-a-host/receipt/Receipt"));
 
+const NotFound = lazy(() => import("@/assets/components/NotFound"));
+
 export default function PropertyCreateRoute() {
     return (
         <Routes>
             <Route
-                path="/become-a-host/:propertyId"
                 element={<CreatePropertyLayout />}
             >
                 <Route path="about-your-place" element={<AboutYourPlace />} />
@@ -38,6 +39,8 @@ export default function PropertyCreateRoute() {
                 <Route path="price" element={<Price />} />
                 <Route path="discount" element={<Discount />} />
                 <Route path="receipt" element={<Receipt />} />
+
+                <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
     )

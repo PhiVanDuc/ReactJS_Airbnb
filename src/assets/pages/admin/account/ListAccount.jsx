@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { lowerCase } from "@/utils/formatFirstLetter";
 
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import columns from "./data-table/columns";
 import DataTable from "./data-table/DataTable";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const types = ["All", "User", "Owner", "Admin"];
 
@@ -99,6 +100,16 @@ const demoData = [
 
 export default function ListAccount() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        // Giả lập việc tải dữ liệu
+        setTimeout(() => {
+            setData(demoData);
+            setLoading(false);
+        }, 2000);
+    }, []);
 
     useEffect(() => {
         const type = searchParams.get("type");
@@ -110,7 +121,6 @@ export default function ListAccount() {
             setSearchParams(newParams);
         }
     }, [searchParams]);
-    
 
     return (
         <div>
@@ -128,6 +138,11 @@ export default function ListAccount() {
                                 )}
                                 variant="outline"
                                 onClick={() => {
+                                    if (loading) {
+                                        toast.warning("Please wait until the data arrives.");
+                                        return;
+                                    }
+
                                     const formatType = lowerCase(type);
                                     const newParams = new URLSearchParams(searchParams.toString());
                                     newParams.set("type", formatType);
@@ -141,7 +156,7 @@ export default function ListAccount() {
                 }
             </div>
 
-            <DataTable columns={columns} data={demoData} />
+            <DataTable columns={columns} data={data} loading={loading} />
         </div>
     )
 }

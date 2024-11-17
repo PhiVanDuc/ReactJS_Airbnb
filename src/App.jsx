@@ -1,8 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-// import Test from "./assets/pages/test/Test";
-
 import SuspenseLoading from "./assets/components/loadings/SuspenseLoading";
 import HomeRoute from "./routes/homeRoute";
 import HostingRoute from "./routes/HostingRoute";
@@ -11,6 +9,7 @@ import AdminRoute from "./routes/AdminRoute";
 
 const SuccessPayment = lazy(() => import("./assets/pages/success_payment/SuccessPayment"));
 const PublishCelebration = lazy(() => import("./assets/pages/become-a-host/publish-celebration/PublishCelebration"));
+const NotFound = lazy(() => import("@/assets/components/NotFound"));
 
 import { Toaster } from "sonner";
 
@@ -18,36 +17,40 @@ export default function App() {
     return (
         <div className="font-inter">
             <Toaster />
- 
-            {/* Home route */}
-            <HomeRoute />
-            {/* End */}
-
-            {/* Hosting route */}
-            <HostingRoute />
-            {/* End */}
-
-            {/* Property create route */}
-            <PropertyCreateRoute />
-            {/* End */}
 
             <Routes>
-                {/* <Route path="/test" element={<Test />} /> */}
-                
-                {/* Success payment route */}
-                <Route path="/success-payment" element={<SuccessPayment />} />
+                {/* Home route */}
+                <Route path="/*" element={<HomeRoute />} />
                 {/* End */}
 
-                <Route path="/become-a-host/:propertyId/publish-celebration" element={
+                {/* Admin Route */}
+                <Route path="admin/*" element={<AdminRoute />} />
+                {/* End */}
+
+                {/* Hosting route */}
+                <Route path="hosting/*" element={<HostingRoute />} />
+                {/* End */}
+
+                {/* Property create route */}
+                <Route path="become-a-host/:propertyId/*" element={<PropertyCreateRoute />} />
+                {/* End */}
+
+                {/* Success payment route */}
+                <Route path="success-payment" element={<SuccessPayment />} />
+                {/* End */}
+
+                <Route path="become-a-host/:propertyId/publish-celebration" element={
                     <Suspense fallback={<SuspenseLoading />}>
                         <PublishCelebration />
                     </Suspense>
                 } />
+
+                <Route path="*" element={
+                    <Suspense fallback={<SuspenseLoading />}>
+                        <NotFound />
+                    </Suspense>
+                } />
             </Routes>
-            
-            {/* Admin Route */}
-            <AdminRoute />
-            {/* End */}
         </div>
     )
 }
