@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
     Tooltip,
@@ -58,6 +58,7 @@ const demoData = [
 ]
 
 export default function ListCategory() {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -81,13 +82,25 @@ export default function ListCategory() {
         }
     }, [searchParams]);
 
+    const handleClickCreateButton = () => {
+        navigate('create');
+    }
+
     return (
         <div>
             <div className="flex items-center justify-between gap-x-[20px] mb-[20px] lg:mb-[40px]">
                 <h2 className="text-[26px] font-semibold">Categories</h2>
 
-                <Button className="hidden lg:flex">Add category</Button>
-                <div className="lg:hidden w-[35px] h-[35px] flex items-center justify-center rounded-full shadow-md bg-slate-50 cursor-pointer text-neutral-600 hover:bg-slate-100 hover:text-neutral-800 transition">
+                <Button
+                    onClick={handleClickCreateButton}
+                    className="hidden lg:flex"
+                >
+                    Add category
+                </Button>
+                <div
+                    onClick={handleClickCreateButton}
+                    className="lg:hidden w-[35px] h-[35px] flex items-center justify-center rounded-full shadow-md bg-slate-50 cursor-pointer text-neutral-600 hover:bg-slate-100 hover:text-neutral-800 transition"
+                >
                     <Plus size={20} />
                 </div>
             </div>
