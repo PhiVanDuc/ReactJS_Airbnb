@@ -42,9 +42,12 @@ export default function RenderIcon({ nameIcon, propsIcon }) {
 
     useEffect(() => {
         const lib = nameIcon.replace(/([a-z0-9])([A-Z])/g, "$1 $2").split(" ")[0].toLowerCase();
-
+        console.log(lib);
+        
         async function loadIcon() {
-            const icons = await iconModules[lib]();
+            let icons = await iconModules[lib]();
+            if (!icons[nameIcon] && lib === 'fa') icons = await iconModules[lib + '6']();
+            
             setComponent({
                 icon: icons[nameIcon],
             });

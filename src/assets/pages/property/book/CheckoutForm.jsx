@@ -19,7 +19,7 @@ export default function CheckoutForm({ amount }) {
                 {
                     amount: convertToSubCurrency(amount)
                 },
-                "/stripe/create_payment_intent"
+                "/api/stripe/create_payment_intent"
             );
 
             const { data } = result;

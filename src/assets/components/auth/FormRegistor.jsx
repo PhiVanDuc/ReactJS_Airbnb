@@ -1,4 +1,11 @@
+import { useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema } from "@/schemas/auth";
+import { axiosInstance } from "@/utils/axiousFetch";
+import { toast } from "sonner";
+import { OK } from "http-status-codes";
 
 import {
     Dialog,
@@ -21,19 +28,19 @@ import {
     InputOTPGroup,
     InputOTPSeparator,
     InputOTPSlot,
-} from "@/components/ui/input-otp"
+} from "@/components/ui/input-otp";
 
 import { PhoneInput } from "../inputs/phone_numbers/PhoneInput";
-import { useEffect, useState } from "react";
 import DialogFormHeader from "./DialogFormHeader";
 
 export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) {
     const [countdown, setCountdown] = useState(0);
 
     const form = useForm({
+        resolver: zodResolver(signupSchema),
         defaultValues: {
             fullname: "",
-            phoneNumber: "",
+            phone_number: "",
             email: "",
             password: "",
             otp: ""
@@ -52,12 +59,37 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
         return () => clearInterval(timer); 
     }, [countdown]);
 
-    const handleSendOtp = () => {
-        setCountdown(10);
+    const handleSendOtp = async () => {
+        const email = form.getValues("email");
+
+        if (!email) {
+            toast.warning("Please type your email first!");
+            return;
+        }
+
+        setCountdown(5);
+        await axiosInstance.post("/auth/send_otp_code", {
+            email,
+            type: "sign up",
+            desc_mail: "Your reset password otp code"
+        });
     }
 
-    const onSubmit = (values) => {
-        console.log(values);
+    const onSubmit = async (values) => {
+        const data = {
+            fullname: values.fullname,
+            phone_number: values.phone_number,
+            email: values.email,
+            password: values.password,
+            otp: values.otp,
+        }
+
+        const sign_up = await axiosInstance.post("/auth/sign_up", { ...data });
+
+        if (sign_up.status === OK) {
+            setShowFormRegistor(false);
+            form.reset();
+        }
     }
 
     return (
@@ -91,7 +123,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -99,7 +131,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
 
                             <FormField
                                 control={form.control}
-                                name="phoneNumber"
+                                name="phone_number"
                                 render={({ field }) => (
                                     <FormItem className="space-y-[5px]">
                                         <FormLabel className="text-[15px] font-semibold">Phone Number</FormLabel>
@@ -108,7 +140,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
                                                 {...field}
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="text-[14px] font-normal" />
                                     </FormItem>
                                 )}
                             />
@@ -139,7 +171,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
                                                     }
                                                 </Button>
                                             </div>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -159,7 +191,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -192,7 +224,7 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
                                                     </InputOTPGroup>
                                                 </InputOTP>
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
