@@ -1,4 +1,10 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { resetPasswordSchema } from "@/schemas/auth";
+import { axiosInstance } from "@/utils/axiousFetch";
+import { callApiSendOtpCode } from "@/apis/auth";
+import { toast } from "sonner";
 
 import {
     Dialog,
@@ -23,13 +29,13 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-import { useEffect, useState } from "react";
 import DialogFormHeader from "./DialogFormHeader";
 
 export default function FormForgotPassword({ showFormForgotPassword, setShowFormForgotPassword }) {
     const [countdown, setCountdown] = useState(0);
 
     const form = useForm({
+        resolver: zodResolver(resetPasswordSchema),
         defaultValues: {
             email: "",
             password: "",
@@ -49,11 +55,33 @@ export default function FormForgotPassword({ showFormForgotPassword, setShowForm
         return () => clearInterval(timer); 
     }, [countdown]);
 
-    const handleSendOtp = () => {
-        setCountdown(10);
+    const handleSendOtp = async () => {
+        const email = form.getValues("email");
+
+        if (!email) {
+            toast.warning("Please type your email first!");
+            return;
+        }
+
+        setCountdown(5);
+        await callApiSendOtpCode({
+            email,
+            type: "reset password",
+            desc_mail: "Your reset password otp code"
+        });
     }
 
-    const onSubmit = (values) => {}
+    const onSubmit = async (values) => {
+        const data = {
+            email: values.email,
+            newPassword: values.password,
+            otp: values.otp
+        };
+
+        await axiosInstance.post("/auth/reset_password", { ...data });
+        setShowFormForgotPassword(false);
+        form.reset();
+    }
 
     return (
         <Dialog
@@ -98,7 +126,7 @@ export default function FormForgotPassword({ showFormForgotPassword, setShowForm
                                                     }
                                                 </Button>
                                             </div>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -118,7 +146,7 @@ export default function FormForgotPassword({ showFormForgotPassword, setShowForm
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -151,7 +179,7 @@ export default function FormForgotPassword({ showFormForgotPassword, setShowForm
                                                     </InputOTPGroup>
                                                 </InputOTP>
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}

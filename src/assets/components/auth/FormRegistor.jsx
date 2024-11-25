@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/schemas/auth";
 import { axiosInstance } from "@/utils/axiousFetch";
+import { callApiSendOtpCode } from "@/apis/auth";
 import { toast } from "sonner";
-import { OK } from "http-status-codes";
 
 import {
     Dialog,
@@ -68,10 +68,10 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
         }
 
         setCountdown(5);
-        await axiosInstance.post("/auth/send_otp_code", {
+        await callApiSendOtpCode({
             email,
             type: "sign up",
-            desc_mail: "Your reset password otp code"
+            desc_mail: "Your sign up otp code"
         });
     }
 
@@ -84,12 +84,9 @@ export default function FormRegistor({ showFormRegistor, setShowFormRegistor }) 
             otp: values.otp,
         }
 
-        const sign_up = await axiosInstance.post("/auth/sign_up", { ...data });
-
-        if (sign_up.status === OK) {
-            setShowFormRegistor(false);
-            form.reset();
-        }
+        await axiosInstance.post("/auth/sign_up", { ...data });
+        setShowFormRegistor(false);
+        form.reset();
     }
 
     return (

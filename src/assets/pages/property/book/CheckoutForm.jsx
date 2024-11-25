@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 
-import send from '@/utils/fetchHelpers';
+import { axiosInstance } from "@/utils/axiousFetch";
 import convertToSubCurrency from '@/utils/convertToSubCurrency';
 
 export default function CheckoutForm({ amount }) {
@@ -15,15 +15,13 @@ export default function CheckoutForm({ amount }) {
 
     useEffect(() => {
         (async () => {
-            const result = await send.public_post(
-                {
-                    amount: convertToSubCurrency(amount)
-                },
-                "/api/stripe/create_payment_intent"
+            const result = await axiosInstance.post(
+                "/stripe/create_payment_intent",
+                { amount: convertToSubCurrency(amount) },
             );
 
             const { data } = result;
-            if (data?.clientSecret) setClientSecret(data?.clientSecret);
+            if (data?.result?.clientSecret) setClientSecret(data?.result?.clientSecret);
         })();
     }, [amount]);
 
@@ -45,7 +43,8 @@ export default function CheckoutForm({ amount }) {
             clientSecret,
             confirmParams: {
                 return_url: `${import.meta.env.VITE_FRONT_END_URL}/success-payment?amount=${amount}`
-            }
+            },
+            redirect: "if_required"
         });
 
         if (error) {

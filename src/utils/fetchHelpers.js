@@ -34,6 +34,7 @@ const send = {
         try {
             const response = await fetch(`${API_SERVER}${pathname}`, {
                 method: "POST",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
                 },

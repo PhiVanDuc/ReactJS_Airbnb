@@ -1,4 +1,9 @@
 import { useForm } from "react-hook-form";
+import useLocalstorage from "@/hooks/useLocalstorage"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signinSchema } from "@/schemas/auth";
+import { axiosInstance } from "@/utils/axiousFetch";
+import { OK } from "http-status-codes";
 
 import {
     Dialog,
@@ -21,14 +26,26 @@ import DialogFormHeader from "./DialogFormHeader";
 
 export default function FormSignIn({ showFormSignIn, setShowFormSignIn }) {
     const form = useForm({
+        resolver: zodResolver(signinSchema),
         defaultValues: {
             email: "",
             password: ""
         }
     });
+    const { set } = useLocalstorage();
 
-    const onSubmit = (values) => {
-        console.log(values);
+    const onSubmit = async (values) => {
+        const sign_in = await axiosInstance.post("/auth/sign_in", { ...values });
+
+        if (sign_in.status === OK) {
+            set(
+                "info_user",
+                sign_in.data.result.account
+            );
+
+            setShowFormSignIn(false);
+            form.reset();
+        }
     }
 
     return (
@@ -61,7 +78,7 @@ export default function FormSignIn({ showFormSignIn, setShowFormSignIn }) {
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
@@ -76,18 +93,23 @@ export default function FormSignIn({ showFormSignIn, setShowFormSignIn }) {
                                             <FormLabel className="text-[15px] font-semibold">Password</FormLabel>
                                             <FormControl>
                                                 <Input
+                                                    type="password"
                                                     placeholder="******"
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage className="text-[14px] font-normal" />
                                         </FormItem>
                                     )
                                 }}
                             />
                         </div>
 
-                        <Button className="w-full bg-root">Sign in</Button>
+                        <Button
+                            className="w-full bg-root"
+                        >
+                            Sign in
+                        </Button>
                     </form>
                 </Form>
 

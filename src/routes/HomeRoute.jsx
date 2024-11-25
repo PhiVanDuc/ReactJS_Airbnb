@@ -1,9 +1,9 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
-import SuspenseLoading from "@/assets/components/loadings/SuspenseLoading";
 
 import UserLayout from "../assets/layouts/UserLayout";
 import HomePage from "../assets/pages/home/HomePage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const SearchList = lazy(() => import("../assets/pages/home/SearchList"))
 const DetailProperty = lazy(() => import("../assets/pages/property/DetailProperty"));
@@ -24,13 +24,15 @@ export default function HomeRoute() {
                 <Route index element={<HomePage />} />
                 <Route path="search" element={<SearchList />} />
                 <Route path="property/:propertyId" element={<DetailProperty />} />
-                <Route path="property/:propertyId/book" element={<PropertyBook />} />
                 <Route path="property/:propertyId/images" element={<Images />} />
-                <Route path="wishlist" element={<Wishlist />} />
-                <Route path="trips" element={<Trips />} />
-                <Route path="trips/property/:propertyId" element={<PropertyInstructions />} />
-                <Route path="messages" element={<Messages />} />
-                <Route path="profile" element={<Profile />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route path="property/:propertyId/book" element={<PropertyBook />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="/trips" element={<Trips />} />
+                    <Route path="/trips/property/:propertyId" element={<PropertyInstructions />} />
+                    <Route path="/messages" element={<Messages />} />
+                    <Route path="/profile" element={<Profile />} />
+                </Route>
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>

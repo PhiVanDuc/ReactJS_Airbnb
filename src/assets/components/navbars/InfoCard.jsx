@@ -1,5 +1,4 @@
-import { lazy, Suspense, useState } from "react";
-
+import { lazy, useState } from "react";
 import { LuMenu } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { cn } from "@/lib/utils";
+import { callApiSignOut } from "@/apis/auth";
 
 const FormSignIn = lazy(() => import("../auth/FormSignIn"));
 const FormRegistor = lazy(() => import("../auth/FormRegistor"));
@@ -103,6 +103,10 @@ export default function InfoCard({ pathname = "" }) {
 
                     <DropdownMenuLabel
                         className="px-[20px] py-[8px] cursor-pointer rounded-[5px] hover:bg-slate-100 transition"
+                        onClick={async () => {
+                            await callApiSignOut();
+                            navigate("/");
+                        }}
                     >
                         Sign out
                     </DropdownMenuLabel>
